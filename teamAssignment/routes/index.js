@@ -7,3 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
+
+router.get('/add_sight', function(req, res, next) {
+  res.render('add_bird_sight', {title: 'Add  a Bird Sight'});
+})

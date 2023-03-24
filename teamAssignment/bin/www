@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('teamassignment:server');
 var http = require('http');
+var database = require('../databases/bird_sights')
 
 /**
  * Get port from environment and store in Express.

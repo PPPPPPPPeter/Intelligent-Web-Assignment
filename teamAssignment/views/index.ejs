@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang ="en">
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <%- include('../views/layouts/head'); %>
   </head>
+  <header>
+    <%- include('../views/layouts/navbar'); %>
+  </header>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
