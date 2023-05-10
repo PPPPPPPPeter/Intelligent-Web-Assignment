@@ -18,19 +18,19 @@ const BirdSightSchema = new mongoose.Schema({
 });
 
 
-const BirdSightModel = mongoose.model('BirdSight', BirdSightSchema);
-
-try {
-    connection = mongoose.connect(mongoDB, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        checkServerIdentity: false,
-    });
-    console.log('connection to mongodb worked!');
-} catch (e) {
-    console.log('error in db connection: ' + e.message);
-}
-
-module.exports = {
-    BirdSightModel
-}
+// const BirdSightModel = mongoose.model('BirdSight', BirdSightSchema);
+//
+// try {
+//     connection = mongoose.connect(mongoDB, {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true,
+//         checkServerIdentity: false,
+//     });
+//     console.log('connection to mongodb worked!');
+// } catch (e) {
+//     console.log('error in db connection: ' + e.message);
+// }
+//
+// module.exports = {
+//     BirdSightModel
+// }
