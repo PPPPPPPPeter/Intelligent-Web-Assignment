@@ -72,6 +72,9 @@ identifiedCheckBox.addEventListener('change', function (e) {
   }
   renderSights();
 });
+identifiedCheckBox.click();
+
+
 
 function renderSights() {
   let filteredSights = allSights;
