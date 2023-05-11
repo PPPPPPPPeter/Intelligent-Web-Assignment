@@ -1,5 +1,6 @@
 const express = require("express");
-const {BirdSightModel} = require("../databases/bird_sights");
+//const {BirdSightModel} = require("../databases/bird_sights");
+const BirdSightModel = require("../databases/bird_sights");
 
 const router = express.Router();
 

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang ="en">
+<head>
+    <%- include('../views/layouts/head'); %>
+</head>
+<header>
+    <%- include('../views/layouts/navbar'); %>
+</header>
+<body>
+<div class="container">
+    <div class="row mt-3 shadow p-4">
+        <div class="col-12 col-lg-5">
+            <img class="rounded-2 w-100" src="<%=bird_sight.photo%>"/>
+        </div>
+        <div class="col-12 col-lg-7">
+            <h4 class="alert alert-info">Bird Sight</h4>
+            <h5><%=bird_sight.identification%></h5> <!-- Bird's Name -->
+            <h6>
+                <i class="bi bi-clock"></i>
+                <%= new Date(bird_sight.datetime).toLocaleString()%>
+            </h6>
+            <div>
+                <h5>Location</h5>
+                <iframe
+                        width="100%"
+                        height="350"
+                        style="border:0"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyATjczKvi0EwUXvs4Rswrdx43riRw76-QI
+    &q=<%=bird_sight.geolocation.latitude%>,<%=bird_sight.geolocation.longitude%>">
+                </iframe>
+            </div>
+            <div class="mt-3">
+                <h5>Description</h5>
+                <p>
+                    <%=bird_sight.description%>
+                </p>
+            </div>
+        </div>
+        <div class="col-12 mt-4">
+            <h4 class="alert alert-warning">Chat</h4>
+            <!-- Chat box and comments will go here -->
+            <div id="chat-box">
+                <!-- Chat messages will be dynamically added here -->
+            </div>
+            <form id="chat-form">
+                <input type="text" id="chat-input" placeholder="Add a comment">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
