@@ -5,7 +5,6 @@ var createError = require('http-errors');
 /* GET home page. */
 router.get('/', async function(req, res, next) {
 
-
   res.render('index');
 });
 
