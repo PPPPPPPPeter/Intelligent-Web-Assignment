@@ -1,4 +1,15 @@
-
+// if ('serviceWorker' in navigator) {
+//   // Register the service worker
+//   window.addEventListener('load', function() {
+//     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+//       // Registration was successful
+//       console.log('ServiceWorker registration successful with scope: ', registration.scope);
+//     }, function(err) {
+//       // registration failed :(
+//       console.log('ServiceWorker registration failed: ', err);
+//     });
+//   });
+// }
 
 let identified = false;
 const sortBy = {
@@ -61,6 +72,14 @@ function renderSortButtons() {
   }
 
 }
+
+// let allSights = [];
+// fetch('/sights')
+//     .then(res => res.json())
+//     .then(data => {
+//       allSights = data;
+//       renderSights();
+//     })
 
 
 const identifiedCheckBox = document.querySelector('#identification');
