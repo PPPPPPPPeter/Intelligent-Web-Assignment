@@ -12,16 +12,16 @@ router.get('/', async function(req, res, next) {
 router.get('/add_sight', function(req, res, next) {
   res.render('add_bird_sight', {title: 'Add  a Bird Sight'});
 })
-router.get('/details/:id', async function(req, res) {
-  const {id} = req.params;
-  const bird_sight = await BirdSight.findById(id);
-  if (!bird_sight) {
-    return createError(404);
-  }
-  res.render("details", {
-    bird_sight
-  })
-});
+// router.get('/details/:id', async function(req, res) {
+//   const {id} = req.params;
+//   const bird_sight = await BirdSight.findById(id);
+//   if (!bird_sight) {
+//     return createError(404);
+//   }
+//   res.render("details", {
+//     bird_sight
+//   })
+// });
 
 
 router.get('/bird_sight/:id', async function(req, res) {
