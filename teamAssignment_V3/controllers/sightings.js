@@ -28,7 +28,6 @@ router.post('/', async (req, res) => {
 router.post('/many', async (req, res) => {
   try {
     const sightData = req.body;
-
     await BirdSightModel.insertMany(sightData);
     res.status(201).send();
   } catch (err) {
