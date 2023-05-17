@@ -1,4 +1,6 @@
-
+/**
+ * Constant variables.
+ */
 const DB = 'SIGHTINGS';
 const STORES = {
   sights: "sights",
@@ -6,19 +8,30 @@ const STORES = {
   all_sights: "all_sights"
 }
 let db;
+/**
+ * Constant variables.
+ */
 const request = window.indexedDB.open(DB, 3);
-
+/**
+ * Handle the error event of indexedDB connection.
+ */
 request.onerror = function (event) {
   console.log("Database error: " + event.target.errorCode);
 }
-
+/**
+ * Handle the success event of indexedDB connection.
+ * If there is a callback function named onDBReady in window, it will be called.
+ */
 request.onsuccess = function (event) {
   db = event.target.result;
   if (window.onDBReady) {
     window.onDBReady();
   }
 }
-
+/**
+ * Handle the upgradeneeded event of indexedDB connection.
+ * In this event, it will create object stores defined in STORES constant if they don't exist.
+ */
 request.onupgradeneeded  = function(event) {
   db = event.target.result;
   for (const key in STORES) {
@@ -29,7 +42,12 @@ request.onupgradeneeded  = function(event) {
   }
 
 };
-
+/**
+ * Function: saveMessage
+ * Description: Save a message in the 'messages' object store.
+ * Input: A message object to be saved.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function saveMessage(message) {
   return new Promise((resolve, reject) => {
     let transaction = db.transaction([STORES.messages], 'readwrite');
@@ -44,7 +62,12 @@ function saveMessage(message) {
     }
   })
 }
-
+/**
+ * Function: saveMessage
+ * Description: Save a message in the 'messages' object store.
+ * Input: A message object to be saved.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function getAllMessages() {
   return new Promise((resolve, reject) => {
     let transaction = db.transaction([STORES.messages], 'readonly');
@@ -67,7 +90,11 @@ function getAllMessages() {
     }
   })
 }
-
+/**
+ * Function: clearAllMessages
+ * Description: Clears all messages from the 'messages' object store.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function clearAllMessages() {
   return new Promise((resolve, reject) => {
     let transaction = db.transaction([STORES.messages], 'readwrite');
@@ -82,7 +109,11 @@ function clearAllMessages() {
     }
   })
 }
-
+/**
+ * Function: clearAllMessages
+ * Description: Clears all messages from the 'messages' object store.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function saveAllSights(sights) {
   sights = sights.map(sight => {
     sight.id = Math.ceil(Math.random() * 100000);
@@ -109,7 +140,11 @@ function saveAllSights(sights) {
 
   })
 }
-
+/**
+ * Function: clearAllSights
+ * Description: Clears all sightings from the 'all_sights' object store.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function clearAllSights() {
   return new Promise((resolve, reject) => {
     let transaction = db.transaction([STORES.all_sights], 'readwrite');
@@ -124,7 +159,11 @@ function clearAllSights() {
     }
   })
 }
-
+/**
+ * Function: clearAllSights
+ * Description: Clears all sightings from the 'all_sights' object store.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function getAllSights() {
   return new Promise((resolve, reject) => {
     let transaction = db.transaction([STORES.all_sights], 'readonly');
@@ -147,7 +186,11 @@ function getAllSights() {
     }
   })
 }
-
+/**
+ * Function: clearAllSights
+ * Description: Clears all sightings from the 'all_sights' object store.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function saveNewSight(sight) {
   console.log(sight)
   return new Promise((resolve, reject) => {
@@ -163,7 +206,11 @@ function saveNewSight(sight) {
     }
   })
 }
-
+/**
+ * Function: getAllNewSight
+ * Description: Retrieves all new sightings from the 'sights' object store.
+ * Output: A Promise which resolves with an array of all new sightings.
+ */
 function getAllNewSight() {
   return new Promise((resolve, reject) => {
     let transaction = db.transaction([STORES.sights], 'readonly');
@@ -186,7 +233,11 @@ function getAllNewSight() {
     }
   })
 }
-
+/**
+ * Function: clearAllSight
+ * Description: Clears all new sightings from the 'sights' object store.
+ * Output: A Promise which resolves if the operation is successful.
+ */
 function clearAllSight() {
   return new Promise((resolve, reject) => {
     let transaction = db.transaction([STORES.sights], 'readwrite');
@@ -201,6 +252,9 @@ function clearAllSight() {
     }
   })
 }
+/**
+ * Service Worker registration.
+ */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
