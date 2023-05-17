@@ -1,3 +1,4 @@
+// Import required modules
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -10,19 +11,24 @@ var birdSightRouter = require("./controllers/sightings");
 const {ChatModel} = require("./models/chat");
 const mongoose = require("mongoose");
 
+// Create the Express app
 var app = express();
+// Create an HTTP server using the Express app
 const server = require('http').createServer(app);
+// Set up Socket.IO for real-time communication
 const io = require('socket.io')(server);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// Set up middleware
 app.use(logger('dev'));
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Define routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/sights", birdSightRouter);
@@ -43,9 +49,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 const ChatSessions = {};
 
+// Handle socket.io connections
 io.on('connection', (socket) => {
   socket.on('sendMessage', async (dataStr) => {
     const data = JSON.parse(dataStr);
@@ -71,7 +78,7 @@ io.on('connection', (socket) => {
       }
     }
   })
-
+  // Handle joining a chat session
   socket.on('joinSession', async (data) => {
     if (!ChatSessions[data]) {
       ChatSessions[data] = [{
@@ -96,6 +103,7 @@ io.on('connection', (socket) => {
     }
 
   });
+  // Handle disconnection
   socket.on('disconnect', () => {
     for (let sightId in ChatSessions) {
       const sockets = ChatSessions[sightId];
@@ -108,7 +116,7 @@ io.on('connection', (socket) => {
     }
   });
 });
-
+// Start the server and listen on the specified port
 server.listen(PORT, () => {
   console.log(`Server started at port ${PORT}`);
 });
