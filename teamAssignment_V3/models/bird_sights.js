@@ -1,7 +1,13 @@
+/**
+ * bird_sights.js - Bird Sight Model
+ */
 var mongoose = require('mongoose');
 var mongoDB = 'mongodb://127.0.0.1:27017/bird_sights';
 mongoose.Promise = global.Promise;
 
+/**
+ * Define the BirdSightSchema
+ */
 const BirdSightSchema = new mongoose.Schema({
     author: String,
     datetime: String,
@@ -19,9 +25,14 @@ const BirdSightSchema = new mongoose.Schema({
     timestamps: true
 });
 
-
+/**
+ * Define the BirdSightModel
+ */
 const BirdSightModel = mongoose.model('BirdSight', BirdSightSchema);
 
+/**
+ * Establish the database connection
+ */
 try {
     connection = mongoose.connect(mongoDB, {
         useNewUrlParser: true,
@@ -32,7 +43,9 @@ try {
 } catch (e) {
     console.log('error in db connection: ' + e.message);
 }
-
+/**
+ * Export the BirdSightModel
+ */
 module.exports = {
     BirdSightModel
 }
