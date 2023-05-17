@@ -17,7 +17,7 @@ router.get('/', async function(req, res, next) {
 /**
  * Route: /identify_bird_sight/:id
  * Method: GET
- * Description: Render the identify bird sight view with the provided ID
+ * Description: Render to identify bird sight view with the provided ID
  */
 router.get('/identify_bird_sight/:id', function (req, res) {
   res.render('identify_bird_sight', {

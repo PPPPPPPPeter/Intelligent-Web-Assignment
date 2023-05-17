@@ -1,8 +1,21 @@
+/**
+ * Module dependencies.
+ */
 const express = require("express");
 const {BirdSightModel} = require("../models/bird_sights");
 const {getBirdData} = require("../dbpedia");
 
+/**
+ * Router initialization.
+ */
+
 const router = express.Router();
+
+/**
+ * Route: GET /query/:name
+ * Description: Retrieves bird data from DBpedia based on the provided bird name.
+ * Response: Returns a JSON array containing the retrieved bird data.
+ */
 
 router.get('/query/:name', async (req, res) => {
   try {
@@ -13,6 +26,13 @@ router.get('/query/:name', async (req, res) => {
     res.status(200).json([]);
   }
 })
+
+/**
+ * Route: POST /
+ * Description: Creates a new bird sighting.
+ * Request Body: Expects the sighting data in the request body.
+ * Response: Returns a 201 status if the sighting is created successfully.
+ */
 
 router.post('/', async (req, res) => {
   try {
@@ -25,6 +45,12 @@ router.post('/', async (req, res) => {
   }
 });
 
+/**
+ * Route: POST /many
+ * Description: Creates multiple bird sightings.
+ * Request Body: Expects an array of sighting data in the request body.
+ * Response: Returns a 201 status if all sightings are created successfully.
+ */
 router.post('/many', async (req, res) => {
   try {
     const sightData = req.body;
@@ -35,11 +61,23 @@ router.post('/many', async (req, res) => {
   }
 })
 
+/**
+ * Route: GET /
+ * Description: Retrieves all bird sightings.
+ * Response: Returns a JSON array containing all bird sightings.
+ */
 router.get('/', async (req, res) => {
   let allSights = await BirdSightModel.find();
   res.status(200).json(allSights);
 });
 
+/**
+ * Route: PUT /:id
+ * Description: Updates a bird sighting with the provided ID.
+ * Request Params: Expects the ID of the sighting to be updated.
+ * Request Body: Expects the updated sighting data in the request body.
+ * Response: Returns a 200 status if the update is successful, or a 403 status if the requester is not the author.
+ */
 router.put('/:id', async (req, res) => {
   const {id} = req.params;
   const sight = await BirdSightModel.findById(id);
@@ -64,4 +102,7 @@ router.put('/:id', async (req, res) => {
   res.status(200).send();
 })
 
+/**
+ * Export the router module.
+ */
 module.exports = router;
