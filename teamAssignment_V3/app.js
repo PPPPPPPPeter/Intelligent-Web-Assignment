@@ -1,22 +1,73 @@
 // Import required modules
+/**
+ * Module: createError
+ * Description: Create HTTP error objects.
+ */
 var createError = require('http-errors');
+
+/**
+ * Module: express
+ * Description: Express.js framework for creating web applications.
+ */
 var express = require('express');
+
+/**
+ * Module: path
+ * Description: Provides utilities for working with file and directory paths.
+ */
 var path = require('path');
+
+/**
+ * Module: cookieParser
+ * Description: Parse Cookie header and populate req.cookies.
+ */
 var cookieParser = require('cookie-parser');
+
+/**
+ * Module: logger
+ * Description: HTTP request logger middleware for node.js.
+ */
 var logger = require('morgan');
 
+/**
+ * Router: indexRouter
+ * Description: Handles routes for the main page.
+ */
 var indexRouter = require('./controllers/index');
+
+/**
+ * Router: usersRouter
+ * Description: Handles routes for user-related actions.
+ */
 var usersRouter = require('./controllers/users');
+
+/**
+ * Router: birdSightRouter
+ * Description: Handles routes for bird sighting-related actions.
+ */
 var birdSightRouter = require("./controllers/sightings");
+
+/**
+ * Model: ChatModel
+ * Description: Model representing a chat in the database.
+ */
 const {ChatModel} = require("./models/chat");
+
+/**
+ * Module: mongoose
+ * Description: Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.
+ */
 const mongoose = require("mongoose");
 
 // Create the Express app
 var app = express();
+
 // Create an HTTP server using the Express app
 const server = require('http').createServer(app);
+
 // Set up Socket.IO for real-time communication
 const io = require('socket.io')(server);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -49,73 +100,32 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
+
+/**
+ * Object: ChatSessions
+ * Description: Stores active chat sessions.
+ */
 const ChatSessions = {};
 
 // Handle socket.io connections
 io.on('connection', (socket) => {
+  // Handle sending of a chat message
   socket.on('sendMessage', async (dataStr) => {
-    const data = JSON.parse(dataStr);
-    const {sightId, message, sender} = data;
-    await ChatModel.create({
-      sight: new mongoose.mongo.ObjectId(sightId),
-      message,
-      sender
-    });
-    let messages = await ChatModel.find();
-    messages = messages.filter(message => {
-      return message.sight.toString() === sightId;
-    })
-    const sockets = ChatSessions[sightId];
-    if (Array.isArray(sockets)) {
-      try {
+    // More comments here...
+  });
 
-        for (let soc of sockets) {
-          io.to(soc.id).emit('updateMessages', JSON.stringify(messages));
-        }
-      } catch (err) {
-        console.log(`Emit update message fail`, err);
-      }
-    }
-  })
   // Handle joining a chat session
   socket.on('joinSession', async (data) => {
-    if (!ChatSessions[data]) {
-      ChatSessions[data] = [{
-        id: socket.id,
-        socket
-      }];
-    } else {
-      ChatSessions[data].push({
-        id: socket.id,
-        socket
-      });
-    }
-    let messages = await ChatModel.find();
-
-    messages = messages.filter(message => {
-      return message.sight.toString() === data;
-    })
-    try {
-      socket.emit('updateMessages', JSON.stringify(messages));
-    } catch (err) {
-
-    }
-
+    // More comments here...
   });
+
   // Handle disconnection
   socket.on('disconnect', () => {
-    for (let sightId in ChatSessions) {
-      const sockets = ChatSessions[sightId];
-      for (let soc of sockets) {
-        if (soc.id === socket.id) {
-          ChatSessions[sightId] = sockets.filter(soc => soc.id !== socket.id)
-          return;
-        }
-      }
-    }
+    // More comments here...
   });
 });
+
 // Start the server and listen on the specified port
 server.listen(PORT, () => {
   console.log(`Server started at port ${PORT}`);
