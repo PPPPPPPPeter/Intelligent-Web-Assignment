@@ -49,7 +49,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3000
 const ChatSessions = {};
 
 // Handle socket.io connections

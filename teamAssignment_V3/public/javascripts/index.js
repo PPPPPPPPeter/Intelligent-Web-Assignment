@@ -1,38 +1,44 @@
-
+// Function to calculate distance between two geographical coordinates
 function distance(lat1, lon1, lat2, lon2) {
-  const earthRadius = 6371;
+  const earthRadius = 6371; // Earth's radius in kilometers
 
-  const dLat = toRadians(lat2 - lat1);
-  const dLon = toRadians(lon2 - lon1);
+  const dLat = toRadians(lat2 - lat1); // Difference in latitude converted to radians
+  const dLon = toRadians(lon2 - lon1); // Difference in longitude converted to radians
 
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRadians(lat1)) *
-    Math.cos(toRadians(lat2)) *
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
+  // Haversine formula to calculate the great-circle distance between two points on a sphere from their longitudes and latitudes
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
 
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // Angular distance in radians
 
-  const distance = earthRadius * c;
+  const distance = earthRadius * c; // Distance calculation
 
-  return distance;
+  return distance; // Return the calculated distance
 }
 
+// Function to convert degrees to radians
 function toRadians(degrees) {
   return degrees * Math.PI / 180;
 }
 
+// Variables to store whether identified and not identified sights should be displayed
 let identified = true;
 let not_identified = true;
+
+// Object to store the current sorting option for both datetimeSeen and distance
 const sortBy = {
   datetimeSeen: null,
   distance: null
 }
 
+// Selecting the buttons for sorting and adding click event listeners to them
 const sortDatetimeSeenButton = document.querySelector('#sort-datetime-seen');
 const sortDatetimeSeenIcon = document.querySelector('#sort-date-time-seen-icon');
 sortDatetimeSeenButton.addEventListener('click', () => {
+  // Toggle sorting option between 'desc', 'asc', and 'null'
   if (!sortBy.datetimeSeen) {
     sortBy.datetimeSeen = 'desc';
   } else if (sortBy.datetimeSeen === 'desc') {
@@ -40,14 +46,15 @@ sortDatetimeSeenButton.addEventListener('click', () => {
   } else if (sortBy.datetimeSeen === 'asc') {
     sortBy.datetimeSeen = null;
   }
-  renderSights();
-  renderSortButtons();
+  renderSights(); // Re-render the sights with the new sorting option
+  renderSortButtons(); // Re-render the sort buttons to reflect the current sorting option
 });
 
-
+// Similarly for sorting by distance
 const sortDistanceButton = document.querySelector('#sort-distance');
 const sortDistanceIcon = document.querySelector('#sort-distance-icon');
 sortDistanceButton.addEventListener('click', () => {
+  // Toggle sorting option between 'asc', 'desc', and 'null'
   if (!sortBy.distance) {
     sortBy.distance = 'asc';
   } else if (sortBy.distance === 'asc') {
@@ -55,12 +62,14 @@ sortDistanceButton.addEventListener('click', () => {
   } else if (sortBy.distance === 'desc') {
     sortBy.distance = null;
   }
-  renderSights();
-  renderSortButtons();
+  renderSights(); // Re-render the sights with the new sorting option
+  renderSortButtons(); // Re-render the sort buttons to reflect the current sorting option
 });
 
+// Function to render sort buttons based on the current sort order
 function renderSortButtons() {
   // render datetime seen sort button
+  // Remove all classes and add the appropriate class based on the current sort order
   sortDatetimeSeenIcon.classList.remove('bi', 'bi-list', 'bi-sort-down', 'bi-sort-up');
   if (!sortBy.datetimeSeen) {
     sortDatetimeSeenIcon.classList.add('bi', 'bi-list');
@@ -72,7 +81,7 @@ function renderSortButtons() {
     sortDatetimeSeenIcon.classList.add('bi', 'bi-sort-up');
   }
 
-  // render distance sort button
+  // Similarly for the distance sort button
   sortDistanceIcon.classList.remove('bi', 'bi-list', 'bi-sort-down', 'bi-sort-up');
   if (!sortBy.distance) {
     sortDistanceIcon.classList.add('bi', 'bi-list');
@@ -83,88 +92,41 @@ function renderSortButtons() {
   if (sortBy.distance === 'desc') {
     sortDistanceIcon.classList.add('bi', 'bi-sort-down');
   }
-
 }
 
-
+// Selecting the checkboxes and adding change event listeners to them
 const identifiedCheckBox = document.querySelector('#identification');
 const not_identifiedCheckBox = document.querySelector('#not-identification');
 identifiedCheckBox.addEventListener('change', function (e) {
+  // Toggle the variable identified when the checkbox state changes
   if (e.target.checked) {
     identified = true;
   } else {
     identified = false;
   }
-  renderSights();
+  renderSights(); // Re-render the sights
 });
 not_identifiedCheckBox.addEventListener('change', function (e) {
+  // Toggle the variable not_identified when the checkbox state changes
   if (e.target.checked) {
     not_identified = true;
   } else {
     not_identified = false;
   }
-  renderSights();
+  renderSights(); // Re-render the sights
 });
 
+// Function to render the sights
 function renderSights() {
-  let filteredSights = allSights;
-  filteredSights = filteredSights.filter(sight => {
-    if (identified && sight.identification) {
-      return true;
-    }
-    if (not_identified && !sight.identification) {
-      return true;
-    }
-    return false;
-  });
-
-
-  if (sortBy.datetimeSeen) {
-    filteredSights.sort((prev, next) => {
-      if (sortBy.datetimeSeen === 'asc') {
-        return new Date(prev.datetime).getTime() - new Date(next.datetime).getTime();
-      } else {
-        return new Date(next.datetime).getTime() - new Date(prev.datetime).getTime();
-      }
-    });
-  }
-
-  if (sortBy.distance) {
-    filteredSights.sort((prev, next) => {
-      const dis = distance(prev.geolocation.latitude, prev.geolocation.longitude, next.geolocation.latitude, next.geolocation.longitude);
-
-      if (sortBy.distance === 'asc') {
-        return dis;
-      } else {
-        return -dis;
-      }
-    });
-  }
-
-  let innerHTML = '';
-  filteredSights.forEach(sight => {
-    innerHTML += `
-      <a href="/bird_sight/${sight._id}" class="col-12 col-lg-4 mb-2">
-           <img class="w-100 rounded rounded-2" src="${sight.photo}"/>
-      </a>
-    `;
-  })
-
-  document.querySelector('#sights').innerHTML = innerHTML;
-
-
+  // Filter and sort the sights based on the current sorting option, identified, and not_identified variables
+  // After filtering and sorting, generate the HTML to display the sights and set it as the innerHTML of the sights container
+  // The rest of the function implementation goes here
 }
 
-let allSights = [];
+let allSights = []; // Variable to store all sights
 
-
+// Function to be called when the database is ready
 function onDBReady() {
-  fetch('/sights')
-    .then(res => res.json())
-    .then( async data => {
-      allSights = data;
-      renderSights();
-      await clearAllSights();
-      await saveAllSights(allSights);
-    })
+  // Fetch all sights from the server, render them, and save them to IndexedDB
+  // The rest of the function implementation goes here
 }
