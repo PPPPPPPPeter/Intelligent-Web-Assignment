@@ -6,6 +6,8 @@ running of the project, and the basic functionality of the application.
 
 # GitHub 
 
+For information regarding our team's GitHub repository as well as the commit history or records, please visit **https://github.com/PPPPPPPPeter/Intelligent-Web-Assignment**.
+
 
 
 # Prerequisites
