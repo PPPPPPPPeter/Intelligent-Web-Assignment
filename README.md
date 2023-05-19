@@ -39,6 +39,12 @@ Ensure you have Node.js and npm installed on your machine. This project was buil
 
   For more detailed information about the code, see the generated JSDoc documentation
   located at **Team U 05/documentation**.
+ 
+# Video
+
+  The '**videos and screenshots**' folder under the '**Team U 05**' directory contains screen 
+  recordings demonstrating the workflow of the web system in both online and offline conditions.
+
   
   
 
